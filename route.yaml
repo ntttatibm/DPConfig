@@ -1,0 +1,16 @@
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: web-mgmt
+  namespace: datapower
+spec:
+  host: web-mgmt-datapower.apps.66602b63437f66001e444f32.cloud.techzone.ibm.com
+  to:
+    kind: Service
+    name: datapower-svc
+    weight: 100
+  port:
+    targetPort: webgui
+  tls:
+    termination: passthrough
+  wildcardPolicy: None
