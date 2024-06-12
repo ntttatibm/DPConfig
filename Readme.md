@@ -1,0 +1,1 @@
+# instruction how to export configuration from old DP: https://www.ibm.com/support/pages/migrating-your-configuration-ibm-datapower-gateway-appliance-different-appliance
