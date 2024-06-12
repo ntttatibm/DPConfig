@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: datapower
+  namespace: integration
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: datapower
+  template:
+    metadata:
+      labels:
+        app: datapower
+    spec:
+      containers:
+      - name: datapower
+        image: icr.io/cpopen/datapower/datapower-limited:10.5.4.0
+        stdin: true
+        tty: true
+        ports:
+        - name: web-mgmt
+          containerPort: 9090
+        - name: rest-mgmt
+          containerPort: 5554
+        - name: api
+          containerPort: 8443
+        - name: tls
+          containerPort: 443
+        env:
+        - name: DATAPOWER_ACCEPT_LICENSE
+          value: "true"
+        - name: DATAPOWER_INTERACTIVE
+          value: "true"
+        - name: DATAPOWER_ENGINE_ID_SEED
+          value: "01234"
+        - name: DATAPOWER_FAST_STARTUP
+          value: "false"
+        - name: DATAPOWER_WORKER_THREADS
+          value: "2"
+        - name: DATAPOWER_LOG_COLOR
+          value: "true"
+        - name: DATAPOWER_LOG_STDOUT
+          value: "true"
+        volumeMounts:
+        - mountPath: /opt/ibm/datapower/drouter/config
+          name: config-volume
+        - mountPath: /opt/ibm/datapower/drouter/local
+          name: local-volume
+        - mountPath: /opt/ibm/datapower/root/secure/usrcerts
+          name: usrcerts-volume
+      volumes:
+      - name: config-volume
+        configMap:
+          name: dp-config
+      - name: local-volume
+        emptyDir: {}
+      - name: usrcerts-volume
+        emptyDir: {}
